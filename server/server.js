@@ -17,7 +17,8 @@ app.use(bodyParser.json());
 
 /** Fin Body parser */
 
-app.use(require("./routes/usuario"));
+// Rutas
+app.use(require("./routes/index"));
 
 // Configuración
 
