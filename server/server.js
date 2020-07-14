@@ -3,6 +3,7 @@ require("./config/config");
 const express = require("express");
 const colors = require("colors");
 const mongoose = require("mongoose");
+const path = require("path");
 
 const app = express();
 
@@ -19,6 +20,9 @@ app.use(bodyParser.json());
 
 // Rutas
 app.use(require("./routes/index"));
+
+//Habilitar el public
+app.use(express.static(path.resolve(__dirname, "../public")));
 
 // Configuración
 
