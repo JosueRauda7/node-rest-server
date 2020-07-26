@@ -76,29 +76,36 @@ async function verify(token) {
 app.post("/google", async (req, res) => {
 	let token = req.body.idtoken;
 
+	console.log(token);
+
 	let googleUser = await verify(token).catch((err) => {
-		return res.status(403).json({
+		res.status(403).json({
 			ok: false,
 			err,
 		});
+
+		return;
 	});
 
 	Usuario.findOne({ email: googleUser.email }, (err, usuarioDB) => {
 		if (err) {
-			return res.status(500).json({
+			res.status(500).json({
 				ok: false,
 				err,
 			});
+
+			return;
 		}
 
 		if (usuarioDB) {
 			if (usuarioDB.google === false) {
-				return res.status(400).json({
+				res.status(400).json({
 					ok: false,
 					err: {
 						message: "Debe de usar su autenticación normal",
 					},
 				});
+				return;
 			} else {
 				let token = jwt.sign(
 					{
@@ -126,15 +133,17 @@ app.post("/google", async (req, res) => {
 
 			usuario.save((err, user) => {
 				if (err) {
-					return res.status(500).json({
+					res.status(500).json({
 						ok: false,
 						err,
 					});
+
+					return;
 				}
 
 				let token = jwt.sign(
 					{
-						usuario: usuarioDB,
+						usuario: user,
 					},
 					`${process.env.SEED}`,
 					{ expiresIn: process.env.CADUCIDAD_TOKEN }
@@ -142,7 +151,7 @@ app.post("/google", async (req, res) => {
 
 				return res.json({
 					ok: true,
-					usuario: usuarioDB,
+					usuario: user,
 					token,
 				});
 			});
