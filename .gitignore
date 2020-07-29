@@ -1,2 +1,7 @@
 #node_modules
 node_modules/
+
+#carpeta uploads y tmp
+tmp/
+productos/
+usuarios/
